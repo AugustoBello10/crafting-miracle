@@ -1,56 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  --color-medieval-dark: #0a0a0a;
-  --color-medieval-card: #1a1a1a;
   --color-medieval-gold: #d4af37;
-  --color-medieval-red: #8b0000;
+  --color-medieval-dark: #1a1a1a;
+  --color-medieval-card: #262626;
   --color-medieval-text: #e0e0e0;
+  --color-medieval-red: #8b0000;
 }
 
 @layer base {
   body {
-    @apply bg-medieval-dark text-medieval-text font-sans antialiased;
-    background-image: radial-gradient(circle at center, #1a1110 0%, #0a0a0a 100%);
+    @apply bg-[#0f0f0f] text-medieval-text;
+    background-image: radial-gradient(circle at center, #1a1a1a 0%, #0f0f0f 100%);
   }
 }
 
-.medieval-border {
-  border: 2px solid #d4af37;
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(212, 175, 55, 0.1);
+@layer components {
+  .medieval-border {
+    @apply border-2 border-medieval-gold/30 shadow-[0_0_15px_rgba(212,175,55,0.1)];
+  }
+
+  .medieval-card {
+    @apply relative overflow-hidden;
+  }
+
+  .medieval-card::before {
+    content: "";
+    @apply absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-medieval-gold/50 to-transparent;
+  }
+
+  .medieval-input {
+    @apply w-full bg-black/40 border border-medieval-gold/30 rounded px-4 py-3 text-medieval-gold focus:outline-none focus:border-medieval-gold transition-colors;
+  }
+
+  .medieval-button {
+    @apply bg-medieval-gold text-black font-black py-3 px-6 rounded-sm transition-all duration-300 uppercase tracking-widest hover:bg-medieval-gold/80 active:scale-95 shadow-[0_4px_0_#8b7326];
+  }
 }
 
-.medieval-button {
-  @apply bg-medieval-red text-white font-bold py-3 px-6 rounded-sm transition-all duration-300 uppercase tracking-widest;
-  border: 1px solid #d4af37;
-  text-shadow: 1px 1px 2px black;
-}
-
-.medieval-button:hover {
-  @apply bg-red-700;
-  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-  transform: translateY(-2px);
-}
-
-.medieval-input {
-  @apply bg-zinc-900 border-medieval-gold text-medieval-gold p-3 rounded-sm focus:outline-none focus:ring-2 focus:ring-medieval-gold/50;
-  border: 1px solid #d4af37;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #8b0000;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #d4af37;
-}
