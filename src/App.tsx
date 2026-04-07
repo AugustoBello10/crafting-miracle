@@ -9,7 +9,7 @@ import {
   Hammer, Sword, Gem, Pickaxe, Wand2, Zap, Twitch, 
   MessageSquare, ExternalLink, Info, Table as TableIcon, 
   TrendingUp, AlertTriangle, Book, Sparkles, Briefcase, 
-  ChevronRight, Menu, X 
+  ChevronRight, Menu, X, Map, Youtube, Fish, FlaskConical, Utensils, Sprout, Scissors 
 } from 'lucide-react';
 
 // --- Dados do Banco de Dados Embutido ---
@@ -353,10 +353,11 @@ const ATTRIBUTE_DATA: Record<string, AttributeItem[]> = {
   ]
 };
 
-type Tab = 'home' | 'crafting' | 'atributos' | 'profissoes' | 'wiki';
+type Tab = 'home' | 'calculadoras' | 'profissoes' | 'mapa' | 'wiki';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [calcSubTab, setCalcSubTab] = useState<'crafting' | 'atributos'>('crafting');
   const [skill, setSkill] = useState<number>(10);
   const [selectedItemName, setSelectedItemName] = useState<string>(CRAFT_ITEMS[0].items[0].name);
   const [chance, setChance] = useState<number>(10);
@@ -410,9 +411,9 @@ export default function App() {
 
   const tabs = [
     { id: 'home', label: 'Início', icon: <Book className="w-4 h-4" /> },
-    { id: 'crafting', label: 'Crafting', icon: <Hammer className="w-4 h-4" /> },
-    { id: 'atributos', label: 'Atributos', icon: <Sparkles className="w-4 h-4" /> },
+    { id: 'calculadoras', label: 'Calculadoras', icon: <Hammer className="w-4 h-4" /> },
     { id: 'profissoes', label: 'Profissões', icon: <Briefcase className="w-4 h-4" /> },
+    { id: 'mapa', label: 'Mapa', icon: <Map className="w-4 h-4" /> },
     { id: 'wiki', label: 'Wiki Geral', icon: <Book className="w-4 h-4" /> },
   ];
 
@@ -529,28 +530,34 @@ export default function App() {
                     <p className="text-medieval-text/70 text-sm leading-relaxed">
                       Acesse nossas ferramentas de precisão para otimizar seus recursos e garantir o sucesso em suas empreitadas.
                     </p>
-                    <div className="grid grid-cols-1 gap-3 pt-4">
-                      <button 
-                        onClick={() => setActiveTab('crafting')}
-                        className="flex items-center justify-between p-4 bg-black/40 border border-medieval-gold/20 rounded hover:border-medieval-gold hover:bg-medieval-gold/5 transition-all group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Hammer className="text-medieval-gold w-5 h-5" />
-                          <span className="font-bold uppercase tracking-wider text-sm">Calculadora de Crafting</span>
-                        </div>
-                        <ChevronRight className="text-medieval-gold w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('atributos')}
-                        className="flex items-center justify-between p-4 bg-black/40 border border-medieval-gold/20 rounded hover:border-medieval-gold hover:bg-medieval-gold/5 transition-all group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <Sparkles className="text-medieval-gold w-5 h-5" />
-                          <span className="font-bold uppercase tracking-wider text-sm">Chance de Atributos</span>
-                        </div>
-                        <ChevronRight className="text-medieval-gold w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </div>
+                      <div className="grid grid-cols-1 gap-3 pt-4">
+                        <button 
+                          onClick={() => {
+                            setActiveTab('calculadoras');
+                            setCalcSubTab('crafting');
+                          }}
+                          className="flex items-center justify-between p-4 bg-black/40 border border-medieval-gold/20 rounded hover:border-medieval-gold hover:bg-medieval-gold/5 transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Hammer className="text-medieval-gold w-5 h-5" />
+                            <span className="font-bold uppercase tracking-wider text-sm">Calculadora de Crafting</span>
+                          </div>
+                          <ChevronRight className="text-medieval-gold w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setActiveTab('calculadoras');
+                            setCalcSubTab('atributos');
+                          }}
+                          className="flex items-center justify-between p-4 bg-black/40 border border-medieval-gold/20 rounded hover:border-medieval-gold hover:bg-medieval-gold/5 transition-all group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <Sparkles className="text-medieval-gold w-5 h-5" />
+                            <span className="font-bold uppercase tracking-wider text-sm">Chance de Atributos</span>
+                          </div>
+                          <ChevronRight className="text-medieval-gold w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
                   </div>
 
                   {/* Card Twitch/Discord */}
@@ -586,278 +593,346 @@ export default function App() {
               </motion.div>
             )}
 
-            {activeTab === 'crafting' && (
+            {activeTab === 'calculadoras' && (
               <motion.div
-                key="crafting"
+                key="calculadoras"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-12"
               >
-                {/* Cabeçalho Crafting */}
-                <header className="text-center mb-12">
-                  <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
-                    Sistema de Crafting
-                  </h1>
-                  <p className="text-medieval-gold/80 font-mono text-sm">
-                    Cálculos de chance e guia de materiais
-                  </p>
-                </header>
+                {/* Sub-navegação Calculadoras */}
+                <div className="flex justify-center gap-4 mb-8">
+                  <button
+                    onClick={() => setCalcSubTab('crafting')}
+                    className={`px-6 py-3 rounded-sm font-black uppercase tracking-widest text-xs transition-all ${
+                      calcSubTab === 'crafting'
+                        ? 'bg-medieval-gold text-black shadow-[0_4px_0_#8b7326]'
+                        : 'bg-medieval-card text-medieval-gold/60 border border-medieval-gold/20 hover:border-medieval-gold/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Hammer className="w-4 h-4" /> Crafting
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setCalcSubTab('atributos')}
+                    className={`px-6 py-3 rounded-sm font-black uppercase tracking-widest text-xs transition-all ${
+                      calcSubTab === 'atributos'
+                        ? 'bg-medieval-gold text-black shadow-[0_4px_0_#8b7326]'
+                        : 'bg-medieval-card text-medieval-gold/60 border border-medieval-gold/20 hover:border-medieval-gold/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" /> Atributos
+                    </div>
+                  </button>
+                </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  {/* Calculadora */}
-                  <div className="lg:col-span-7 space-y-6">
-                    <div className="medieval-card bg-medieval-card p-6 sm:p-8 medieval-border rounded-lg">
-                      <div className="space-y-6">
-                        <div className="flex flex-col gap-2">
-                          <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
-                            <Zap className="w-4 h-4" /> Sua Skill Atual
-                          </label>
-                          <input
-                            type="number"
-                            min="10"
-                            max="200"
-                            value={skill}
-                            onChange={(e) => setSkill(Number(e.target.value))}
-                            className="medieval-input text-2xl font-bold"
-                          />
-                        </div>
+                {calcSubTab === 'crafting' ? (
+                  <div className="space-y-12">
+                    {/* Cabeçalho Crafting */}
+                    <header className="text-center mb-12">
+                      <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
+                        Sistema de Crafting
+                      </h1>
+                      <p className="text-medieval-gold/80 font-mono text-sm">
+                        Cálculos de chance e guia de materiais
+                      </p>
+                    </header>
 
-                        <div className="flex flex-col gap-2">
-                          <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
-                            <Hammer className="w-4 h-4" /> Item a ser Craftado
-                          </label>
-                          <select
-                            value={selectedItemName}
-                            onChange={(e) => setSelectedItemName(e.target.value)}
-                            className="medieval-input cursor-pointer appearance-none"
-                          >
-                            {CRAFT_ITEMS.map((category) => (
-                              <optgroup key={category.category} label={category.category} className="bg-medieval-dark text-medieval-gold">
-                                {category.items.map((item) => (
-                                  <option key={item.name} value={item.name}>
-                                    {item.name} (Mult: {item.multiplier})
-                                  </option>
-                                ))}
-                              </optgroup>
-                            ))}
-                          </select>
-                        </div>
-
-                        {selectedItem.req && (
-                          <div className="bg-black/40 p-4 rounded border border-medieval-gold/20 flex items-start gap-3">
-                            <Info className="w-5 h-5 text-medieval-gold shrink-0 mt-0.5" />
-                            <div>
-                              <p className="text-xs uppercase text-medieval-gold/60 font-bold tracking-tighter">Requisitos:</p>
-                              <p className="text-sm text-medieval-text italic">{selectedItem.req}</p>
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="pt-6 border-t border-medieval-gold/20">
-                          <div className="text-center space-y-2">
-                            <p className="text-medieval-gold/60 uppercase text-xs font-bold tracking-[0.2em]">Chance de Sucesso</p>
-                            <div className={`text-6xl sm:text-7xl font-black ${chance >= 70 ? 'text-green-500' : chance >= 40 ? 'text-medieval-gold' : 'text-medieval-red'}`}>
-                              {chance}%
-                            </div>
-                            <div className="w-full h-3 bg-black/50 rounded-full overflow-hidden border border-medieval-gold/30 mt-4">
-                              <motion.div 
-                                initial={{ width: 0 }}
-                                animate={{ width: `${chance}%` }}
-                                className={`h-full ${chance >= 70 ? 'bg-green-500' : chance >= 40 ? 'bg-medieval-gold' : 'bg-medieval-red'}`}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                      {/* Calculadora */}
+                      <div className="lg:col-span-7 space-y-6">
+                        <div className="medieval-card bg-medieval-card p-6 sm:p-8 medieval-border rounded-lg">
+                          <div className="space-y-6">
+                            <div className="flex flex-col gap-2">
+                              <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
+                                <Zap className="w-4 h-4" /> Sua Skill Atual
+                              </label>
+                              <input
+                                type="number"
+                                min="10"
+                                max="200"
+                                value={skill}
+                                onChange={(e) => setSkill(Number(e.target.value))}
+                                className="medieval-input text-2xl font-bold"
                               />
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                              <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
+                                <Hammer className="w-4 h-4" /> Item a ser Craftado
+                              </label>
+                              <select
+                                value={selectedItemName}
+                                onChange={(e) => setSelectedItemName(e.target.value)}
+                                className="medieval-input cursor-pointer appearance-none"
+                              >
+                                {CRAFT_ITEMS.map((category) => (
+                                  <optgroup key={category.category} label={category.category} className="bg-medieval-dark text-medieval-gold">
+                                    {category.items.map((item) => (
+                                      <option key={item.name} value={item.name}>
+                                        {item.name} (Mult: {item.multiplier})
+                                      </option>
+                                    ))}
+                                  </optgroup>
+                                ))}
+                              </select>
+                            </div>
+
+                            {selectedItem.req && (
+                              <div className="bg-black/40 p-4 rounded border border-medieval-gold/20 flex items-start gap-3">
+                                <Info className="w-5 h-5 text-medieval-gold shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-xs uppercase text-medieval-gold/60 font-bold tracking-tighter">Requisitos:</p>
+                                  <p className="text-sm text-medieval-text italic">{selectedItem.req}</p>
+                                </div>
+                              </div>
+                            )}
+
+                            <div className="pt-6 border-t border-medieval-gold/20">
+                              <div className="text-center space-y-2">
+                                <p className="text-medieval-gold/60 uppercase text-xs font-bold tracking-[0.2em]">Chance de Sucesso</p>
+                                <div className={`text-6xl sm:text-7xl font-black ${chance >= 70 ? 'text-green-500' : chance >= 40 ? 'text-medieval-gold' : 'text-medieval-red'}`}>
+                                  {chance}%
+                                </div>
+                                <div className="w-full h-3 bg-black/50 rounded-full overflow-hidden border border-medieval-gold/30 mt-4">
+                                  <motion.div 
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${chance}%` }}
+                                    className={`h-full ${chance >= 70 ? 'bg-green-500' : chance >= 40 ? 'bg-medieval-gold' : 'bg-medieval-red'}`}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  {/* Twitch/Social */}
-                  <div className="lg:col-span-5 space-y-6">
-                    <div className="medieval-border rounded-lg overflow-hidden bg-black aspect-video">
-                      <iframe
-                        src={`https://player.twitch.tv/?channel=obellao_&parent=${window.location.hostname}`}
-                        height="100%" width="100%" allowFullScreen title="Twitch Player"
-                      />
+                      {/* Twitch/Social */}
+                      <div className="lg:col-span-5 space-y-6">
+                        <div className="medieval-border rounded-lg overflow-hidden bg-black aspect-video">
+                          <iframe
+                            src={`https://player.twitch.tv/?channel=obellao_&parent=${window.location.hostname}`}
+                            height="100%" width="100%" allowFullScreen title="Twitch Player"
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 gap-4">
+                          <a href="https://www.twitch.tv/obellao_" target="_blank" rel="noopener noreferrer" className="medieval-button flex items-center justify-center gap-3">
+                            <Twitch className="w-6 h-6" /> Twitch
+                          </a>
+                          <a href="https://discord.gg/nacCypRkqQ" target="_blank" rel="noopener noreferrer" className="bg-[#5865F2] text-white font-bold py-3 px-6 rounded-sm flex items-center justify-center gap-3">
+                            <MessageSquare className="w-6 h-6" /> Discord
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      <a href="https://www.twitch.tv/obellao_" target="_blank" rel="noopener noreferrer" className="medieval-button flex items-center justify-center gap-3">
-                        <Twitch className="w-6 h-6" /> Twitch
-                      </a>
-                      <a href="https://discord.gg/nacCypRkqQ" target="_blank" rel="noopener noreferrer" className="bg-[#5865F2] text-white font-bold py-3 px-6 rounded-sm flex items-center justify-center gap-3">
-                        <MessageSquare className="w-6 h-6" /> Discord
-                      </a>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Tabela de Quebra */}
-                <section className="space-y-6">
-                  <div className="flex items-center gap-3">
-                    <TableIcon className="text-medieval-gold w-6 h-6" />
-                    <h2 className="text-2xl font-black text-medieval-gold uppercase tracking-tight">Guia de Quebra de Itens</h2>
+                    {/* Tabela de Quebra */}
+                    <section className="space-y-6">
+                      <div className="flex items-center gap-3">
+                        <TableIcon className="text-medieval-gold w-6 h-6" />
+                        <h2 className="text-2xl font-black text-medieval-gold uppercase tracking-tight">Guia de Quebra de Itens</h2>
+                      </div>
+                      <div className="medieval-border rounded-lg overflow-hidden bg-medieval-card overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead>
+                            <tr className="bg-black/60 text-medieval-gold uppercase text-xs tracking-widest border-b border-medieval-gold/30">
+                              <th className="p-4 font-black">Item</th>
+                              <th className="p-4 text-center">Máx</th>
+                              <th className="p-4 text-center">Mín</th>
+                              <th className="p-4">Média Mat.</th>
+                              <th className="p-4">Média Prática</th>
+                              <th className="p-4">Veredito</th>
+                            </tr>
+                          </thead>
+                          <tbody className="text-sm">
+                            {BREAKING_DATA.map((row, idx) => (
+                              <tr key={idx} className={`border-b border-medieval-gold/10 hover:bg-white/5 ${idx % 2 === 0 ? 'bg-black/20' : ''}`}>
+                                <td className="p-4 font-bold text-medieval-gold">{row.item}</td>
+                                <td className="p-4 text-center">{row.max}</td>
+                                <td className="p-4 text-center">{row.min}</td>
+                                <td className="p-4">{row.mathAvg}</td>
+                                <td className="p-4 font-mono">{row.practicalAvg}</td>
+                                <td className="p-4">
+                                  <span className={`px-2 py-1 rounded-sm text-[10px] font-black uppercase ${
+                                    row.verdict.includes('QUEBRAR') ? 'text-green-400 border-green-500/30' :
+                                    row.verdict.includes('UPAR') ? 'text-blue-400 border-blue-500/30' : 'text-medieval-red border-medieval-red/30'
+                                  } border bg-black/40`}>
+                                    {row.verdict}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
                   </div>
-                  <div className="medieval-border rounded-lg overflow-hidden bg-medieval-card overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
-                      <thead>
-                        <tr className="bg-black/60 text-medieval-gold uppercase text-xs tracking-widest border-b border-medieval-gold/30">
-                          <th className="p-4 font-black">Item</th>
-                          <th className="p-4 text-center">Máx</th>
-                          <th className="p-4 text-center">Mín</th>
-                          <th className="p-4">Média Mat.</th>
-                          <th className="p-4">Média Prática</th>
-                          <th className="p-4">Veredito</th>
-                        </tr>
-                      </thead>
-                      <tbody className="text-sm">
-                        {BREAKING_DATA.map((row, idx) => (
-                          <tr key={idx} className={`border-b border-medieval-gold/10 hover:bg-white/5 ${idx % 2 === 0 ? 'bg-black/20' : ''}`}>
-                            <td className="p-4 font-bold text-medieval-gold">{row.item}</td>
-                            <td className="p-4 text-center">{row.max}</td>
-                            <td className="p-4 text-center">{row.min}</td>
-                            <td className="p-4">{row.mathAvg}</td>
-                            <td className="p-4 font-mono">{row.practicalAvg}</td>
-                            <td className="p-4">
-                              <span className={`px-2 py-1 rounded-sm text-[10px] font-black uppercase ${
-                                row.verdict.includes('QUEBRAR') ? 'text-green-400 border-green-500/30' :
-                                row.verdict.includes('UPAR') ? 'text-blue-400 border-blue-500/30' : 'text-medieval-red border-medieval-red/30'
-                              } border bg-black/40`}>
-                                {row.verdict}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                ) : (
+                  <div className="space-y-8">
+                    <header className="text-center mb-12">
+                      <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
+                        Calculadora de Atributos
+                      </h1>
+                      <p className="text-medieval-gold/80 font-mono text-sm">
+                        Chance de encantar itens com Mystic Rune & Orbs
+                      </p>
+                    </header>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                      <div className="lg:col-span-7 space-y-6">
+                        <div className="medieval-card bg-medieval-card p-6 sm:p-8 medieval-border rounded-lg">
+                          <div className="space-y-6">
+                            {/* Seleção de Categoria */}
+                            <div className="flex flex-col gap-2">
+                              <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
+                                <TableIcon className="w-4 h-4" /> Categoria
+                              </label>
+                              <select
+                                value={attrCategory}
+                                onChange={(e) => {
+                                  setAttrCategory(e.target.value);
+                                  setAttrItemName(ATTRIBUTE_DATA[e.target.value][0].name);
+                                }}
+                                className="medieval-input cursor-pointer appearance-none"
+                              >
+                                {Object.keys(ATTRIBUTE_DATA).map(cat => (
+                                  <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            {/* Seleção de Item */}
+                            <div className="flex flex-col gap-2">
+                              <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
+                                <Sword className="w-4 h-4" /> Equipamento
+                              </label>
+                              <select
+                                value={attrItemName}
+                                onChange={(e) => setAttrItemName(e.target.value)}
+                                className="medieval-input cursor-pointer appearance-none"
+                              >
+                                {ATTRIBUTE_DATA[attrCategory]?.map(item => (
+                                  <option key={item.name} value={item.name}>
+                                    {item.name} (Classe {item.class})
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            {/* Atributos Permitidos */}
+                            <div className="bg-black/40 p-4 rounded border border-medieval-gold/20">
+                              <p className="text-xs uppercase text-medieval-gold/60 font-bold tracking-tighter mb-3 flex items-center gap-2">
+                                <Info className="w-4 h-4" /> Atributos Permitidos:
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {ATTRIBUTE_DATA[attrCategory]?.find(i => i.name === attrItemName)?.attributes.map(attr => (
+                                  <span key={attr} className="px-2 py-1 bg-medieval-gold/10 border border-medieval-gold/30 rounded text-[10px] text-medieval-gold font-bold uppercase">
+                                    {attr}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Resultados de Atributos */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-medieval-gold/20">
+                              <div className="text-center p-4 bg-black/40 rounded border border-medieval-gold/10">
+                                <p className="text-medieval-gold/60 uppercase text-[10px] font-bold tracking-widest mb-1">Normal Orb</p>
+                                <div className="text-4xl font-black text-medieval-gold">{attrResult.base}%</div>
+                              </div>
+                              <div className="text-center p-4 bg-medieval-gold/5 rounded border border-medieval-gold/30">
+                                <p className="text-medieval-gold uppercase text-[10px] font-bold tracking-widest mb-1">Grand Arcane Orb</p>
+                                <div className="text-4xl font-black text-medieval-gold shadow-medieval-gold">{attrResult.grand}%</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="lg:col-span-5 space-y-6">
+                        {/* Twitch/Social */}
+                        <div className="medieval-border rounded-lg overflow-hidden bg-black aspect-video">
+                          <iframe
+                            src={`https://player.twitch.tv/?channel=obellao_&parent=${window.location.hostname}`}
+                            height="100%" width="100%" allowFullScreen title="Twitch Player"
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 gap-4">
+                          <a href="https://www.twitch.tv/obellao_" target="_blank" rel="noopener noreferrer" className="medieval-button flex items-center justify-center gap-3">
+                            <Twitch className="w-6 h-6" /> Twitch
+                          </a>
+                          <a href="https://discord.gg/nacCypRkqQ" target="_blank" rel="noopener noreferrer" className="bg-[#5865F2] text-white font-bold py-3 px-6 rounded-sm flex items-center justify-center gap-3 hover:bg-[#4752C4] transition-colors">
+                            <MessageSquare className="w-6 h-6" /> Discord
+                          </a>
+                        </div>
+
+                        <div className="medieval-border rounded-lg bg-medieval-card p-6 space-y-4">
+                          <h3 className="text-medieval-gold font-black uppercase text-sm tracking-widest flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4" /> Entenda a Fórmula
+                          </h3>
+                          <div className="space-y-3 text-xs text-medieval-text/70 leading-relaxed font-mono">
+                            <p>1. A <span className="text-medieval-gold">Classe</span> do item define quantos níveis de cada atributo ele pode receber.</p>
+                            <p>2. Somamos as chances de todos os níveis permitidos para este item.</p>
+                            <p>3. Dividimos pelo total de níveis lidos.</p>
+                            <p>4. <span className="text-medieval-gold">Grand Orb</span> aplica um bônus multiplicador de 1.5x no resultado final.</p>
+                          </div>
+                        </div>
+
+                        <div className="p-4 bg-medieval-red/10 border border-medieval-red/20 rounded-lg flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 text-medieval-red shrink-0 mt-0.5" />
+                          <p className="text-[10px] text-medieval-text/60 italic uppercase tracking-tighter">
+                            Atenção: Atributos com menos níveis que a classe do item (ex: ML) usam apenas seus níveis disponíveis no cálculo.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </section>
+                )}
               </motion.div>
             )}
 
-            {activeTab === 'atributos' && (
+            {activeTab === 'mapa' && (
               <motion.div
-                key="atributos"
+                key="mapa"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-8"
               >
-                <header className="text-center mb-12">
+                <header className="text-center mb-8">
                   <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
-                    Calculadora de Atributos
+                    Mapa Interativo
                   </h1>
-                  <p className="text-medieval-gold/80 font-mono text-sm">
-                    Chance de encantar itens com Mystic Rune & Orbs
+                  <p className="text-medieval-gold/80 font-mono text-sm mb-4">
+                    Explore o mundo de Miracle 7.4 em tempo real
                   </p>
+                  <div className="inline-flex items-center gap-3 px-4 py-2 bg-medieval-gold/10 border border-medieval-gold/30 rounded-full">
+                    <AlertTriangle className="w-4 h-4 text-medieval-gold animate-pulse" />
+                    <span className="text-[10px] uppercase font-black tracking-widest text-medieval-gold">
+                      Projeto em Construção • Estudos em Andamento • Ajuda é bem-vinda
+                    </span>
+                  </div>
                 </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  <div className="lg:col-span-7 space-y-6">
-                    <div className="medieval-card bg-medieval-card p-6 sm:p-8 medieval-border rounded-lg">
-                      <div className="space-y-6">
-                        {/* Seleção de Categoria */}
-                        <div className="flex flex-col gap-2">
-                          <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
-                            <TableIcon className="w-4 h-4" /> Categoria
-                          </label>
-                          <select
-                            value={attrCategory}
-                            onChange={(e) => {
-                              setAttrCategory(e.target.value);
-                              setAttrItemName(ATTRIBUTE_DATA[e.target.value][0].name);
-                            }}
-                            className="medieval-input cursor-pointer appearance-none"
-                          >
-                            {Object.keys(ATTRIBUTE_DATA).map(cat => (
-                              <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                          </select>
-                        </div>
+                <div className="medieval-border rounded-lg overflow-hidden bg-black shadow-2xl" style={{ height: '70vh' }}>
+                  <iframe 
+                    src="/mapa.html" 
+                    className="w-full h-full border-none"
+                    title="Mapa Interativo Miracle 7.4"
+                  />
+                </div>
 
-                        {/* Seleção de Item */}
-                        <div className="flex flex-col gap-2">
-                          <label className="text-medieval-gold font-bold uppercase text-xs tracking-widest flex items-center gap-2">
-                            <Sword className="w-4 h-4" /> Equipamento
-                          </label>
-                          <select
-                            value={attrItemName}
-                            onChange={(e) => setAttrItemName(e.target.value)}
-                            className="medieval-input cursor-pointer appearance-none"
-                          >
-                            {ATTRIBUTE_DATA[attrCategory]?.map(item => (
-                              <option key={item.name} value={item.name}>
-                                {item.name} (Classe {item.class})
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        {/* Atributos Permitidos */}
-                        <div className="bg-black/40 p-4 rounded border border-medieval-gold/20">
-                          <p className="text-xs uppercase text-medieval-gold/60 font-bold tracking-tighter mb-3 flex items-center gap-2">
-                            <Info className="w-4 h-4" /> Atributos Permitidos:
-                          </p>
-                          <div className="flex flex-wrap gap-2">
-                            {ATTRIBUTE_DATA[attrCategory]?.find(i => i.name === attrItemName)?.attributes.map(attr => (
-                              <span key={attr} className="px-2 py-1 bg-medieval-gold/10 border border-medieval-gold/30 rounded text-[10px] text-medieval-gold font-bold uppercase">
-                                {attr}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Resultados de Atributos */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-medieval-gold/20">
-                          <div className="text-center p-4 bg-black/40 rounded border border-medieval-gold/10">
-                            <p className="text-medieval-gold/60 uppercase text-[10px] font-bold tracking-widest mb-1">Normal Orb</p>
-                            <div className="text-4xl font-black text-medieval-gold">{attrResult.base}%</div>
-                          </div>
-                          <div className="text-center p-4 bg-medieval-gold/5 rounded border border-medieval-gold/30">
-                            <p className="text-medieval-gold uppercase text-[10px] font-bold tracking-widest mb-1">Grand Arcane Orb</p>
-                            <div className="text-4xl font-black text-medieval-gold shadow-medieval-gold">{attrResult.grand}%</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-5 space-y-6">
-                    {/* Twitch/Social */}
-                    <div className="medieval-border rounded-lg overflow-hidden bg-black aspect-video">
-                      <iframe
-                        src={`https://player.twitch.tv/?channel=obellao_&parent=${window.location.hostname}`}
-                        height="100%" width="100%" allowFullScreen title="Twitch Player"
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      <a href="https://www.twitch.tv/obellao_" target="_blank" rel="noopener noreferrer" className="medieval-button flex items-center justify-center gap-3">
-                        <Twitch className="w-6 h-6" /> Twitch
-                      </a>
-                      <a href="https://discord.gg/nacCypRkqQ" target="_blank" rel="noopener noreferrer" className="bg-[#5865F2] text-white font-bold py-3 px-6 rounded-sm flex items-center justify-center gap-3 hover:bg-[#4752C4] transition-colors">
-                        <MessageSquare className="w-6 h-6" /> Discord
-                      </a>
-                    </div>
-
-                    <div className="medieval-border rounded-lg bg-medieval-card p-6 space-y-4">
-                      <h3 className="text-medieval-gold font-black uppercase text-sm tracking-widest flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4" /> Entenda a Fórmula
-                      </h3>
-                      <div className="space-y-3 text-xs text-medieval-text/70 leading-relaxed font-mono">
-                        <p>1. A <span className="text-medieval-gold">Classe</span> do item define quantos níveis de cada atributo ele pode receber.</p>
-                        <p>2. Somamos as chances de todos os níveis permitidos para este item.</p>
-                        <p>3. Dividimos pelo total de níveis lidos.</p>
-                        <p>4. <span className="text-medieval-gold">Grand Orb</span> aplica um bônus multiplicador de 1.5x no resultado final.</p>
-                      </div>
-                    </div>
-
-                    <div className="p-4 bg-medieval-red/10 border border-medieval-red/20 rounded-lg flex items-start gap-3">
-                      <AlertTriangle className="w-5 h-5 text-medieval-red shrink-0 mt-0.5" />
-                      <p className="text-[10px] text-medieval-text/60 italic uppercase tracking-tighter">
-                        Atenção: Atributos com menos níveis que a classe do item (ex: ML) usam apenas seus níveis disponíveis no cálculo.
-                      </p>
-                    </div>
-                  </div>
+                <div className="text-center">
+                  <a 
+                    href="/mapa.html" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="medieval-button inline-flex items-center gap-3"
+                  >
+                    <ExternalLink className="w-5 h-5" /> Abrir Mapa em Tela Cheia
+                  </a>
                 </div>
               </motion.div>
             )}
@@ -868,10 +943,119 @@ export default function App() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
-                className="text-center py-20"
+                className="space-y-12"
               >
-                <Briefcase className="w-16 h-16 text-medieval-gold/20 mx-auto mb-4" />
-                <h2 className="text-medieval-gold/40 uppercase font-black tracking-widest">Seção de Profissões em breve</h2>
+                <header className="text-center mb-12">
+                  <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
+                    Guia de Profissões
+                  </h1>
+                  <p className="text-medieval-gold/80 font-mono text-sm">
+                    Aprenda as artes e ofícios do Miracle 7.4
+                  </p>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {/* Card Crafting */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 flex flex-col">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Hammer className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Crafting</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed flex-1">
+                      A arte de criar equipamentos, ferramentas e itens valiosos. Essencial para qualquer aventureiro que busca independência.
+                    </p>
+                    <div className="pt-4">
+                      <a 
+                        href="https://www.youtube.com/watch?v=keb5CtwOwBI" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="bg-[#FF0000] text-white font-bold py-3 px-6 rounded-sm flex items-center justify-center gap-3 hover:bg-[#CC0000] transition-colors w-full"
+                      >
+                        <Youtube className="w-5 h-5" /> Tutorial de Crafting
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Mineração */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Pickaxe className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Mineração</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Guia completo sobre extração de minérios e gemas.
+                    </p>
+                  </div>
+
+                  {/* Farming */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Sprout className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Farming</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Guia sobre cultivo e colheita de recursos.
+                    </p>
+                  </div>
+
+                  {/* Cooking */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Utensils className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Cooking</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Receitas e benefícios das comidas preparadas.
+                    </p>
+                  </div>
+
+                  {/* Skinning */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Scissors className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Skinning</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Como extrair couros e materiais de criaturas.
+                    </p>
+                  </div>
+
+                  {/* Fishing */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <Fish className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Fishing</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Guia de pesca e tesouros subaquáticos.
+                    </p>
+                  </div>
+
+                  {/* Alchemy */}
+                  <div className="medieval-card bg-medieval-card p-8 medieval-border rounded-lg space-y-6 opacity-50 grayscale">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-medieval-gold/10 rounded-lg">
+                        <FlaskConical className="text-medieval-gold w-8 h-8" />
+                      </div>
+                      <h2 className="text-2xl font-black text-medieval-gold uppercase">Alchemy</h2>
+                    </div>
+                    <p className="text-medieval-text/70 text-sm leading-relaxed">
+                      Em breve: Criação de poções e elixires mágicos.
+                    </p>
+                  </div>
+                </div>
               </motion.div>
             )}
 
