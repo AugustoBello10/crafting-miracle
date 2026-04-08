@@ -9,7 +9,7 @@ import {
   Hammer, Sword, Gem, Pickaxe, Wand2, Zap, Twitch, 
   MessageSquare, ExternalLink, Info, Table as TableIcon, 
   TrendingUp, AlertTriangle, Book, Sparkles, Briefcase, 
-  ChevronRight, Menu, X, Map, Youtube, Fish, FlaskConical, Utensils, Sprout, Scissors 
+  ChevronRight, Menu, X, Map, Youtube, Fish, FlaskConical, Utensils, Sprout, Scissors, Users 
 } from 'lucide-react';
 
 // --- Dados do Banco de Dados Embutido ---
@@ -353,7 +353,7 @@ const ATTRIBUTE_DATA: Record<string, AttributeItem[]> = {
   ]
 };
 
-type Tab = 'home' | 'calculadoras' | 'profissoes' | 'mapa' | 'wiki';
+type Tab = 'home' | 'calculadoras' | 'profissoes' | 'mapa' | 'eventos' | 'wiki';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -414,6 +414,7 @@ export default function App() {
     { id: 'calculadoras', label: 'Calculadoras', icon: <Hammer className="w-4 h-4" /> },
     { id: 'profissoes', label: 'Profissões', icon: <Briefcase className="w-4 h-4" /> },
     { id: 'mapa', label: 'Mapa', icon: <Map className="w-4 h-4" /> },
+    { id: 'eventos', label: 'Eventos', icon: <Users className="w-4 h-4" /> },
     { id: 'wiki', label: 'Wiki Geral', icon: <Book className="w-4 h-4" /> },
   ];
 
@@ -1055,6 +1056,37 @@ export default function App() {
                       Em breve: Criação de poções e elixires mágicos.
                     </p>
                   </div>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'eventos' && (
+              <motion.div
+                key="eventos"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="space-y-8"
+              >
+                <header className="text-center mb-8">
+                  <h1 className="text-3xl sm:text-4xl font-black text-medieval-gold uppercase tracking-tighter mb-2">
+                    Lobby de Quests & Eventos
+                  </h1>
+                  <div className="inline-flex items-center gap-2 px-4 py-1 bg-medieval-gold/10 border border-medieval-gold/30 rounded-full">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <p className="text-[10px] font-black text-medieval-gold uppercase tracking-widest">Sistema em Tempo Real (Supabase)</p>
+                  </div>
+                </header>
+
+                <div className="medieval-border rounded-lg overflow-hidden bg-black h-[800px] relative">
+                  <iframe 
+                    src="/lobby.html" 
+                    className="w-full h-full border-none"
+                    title="Lobby de Quests"
+                  />
                 </div>
               </motion.div>
             )}
